@@ -4,7 +4,7 @@
 // ---- let (block scoping) ----
 
 let age = 27;
-If (true) {
+if (true) {
     let age = 30;
     console.log(age); // 30
 }
