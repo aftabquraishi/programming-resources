@@ -32,16 +32,16 @@ age = 27; // ok
 // ---- (fat) arrow function ----
 
 function fn() {
-    console.log(“hello”);
+    console.log("hello");
 }
 
 // can be rewritten as
 var fn = () => {
-    console.log(“hello”);
+    console.log("hello");
 }
 
-var fn = () => console.log(“hello”); // one line can be written without curlies
-var fn = () => “hello”; // if it returns a value in one line, then no need to use the ‘return’ keyword
+var fn = () => console.log("hello"); // one line can be written without curlies
+var fn = () => "hello"; // if it returns a value in one line, then no need to use the 'return' keyword
 console.log(fn());
 
 var fn = (a, b) => a + b; // pass argument
@@ -50,16 +50,16 @@ console.log(fn(3, 8));
 var fn = a => a + 5; // for one argument parenthesis can be skipped
 console.log(fn(3));
 
-setTimeout(() => console.log(“Hello”), 1000);
+setTimeout(() => console.log("Hello"), 1000);
 
-// how ‘this’ works with arrow function?
+// how 'this' works with arrow function?
 function fn() {
-    console.log(this); // ‘this’ is pointing to the button object
+    console.log(this); // 'this' is pointing to the button object
 }
-button.addEventListener(‘click’, fn);
+button.addEventListener('click', fn);
 
-var fn2 = () => console.log(this); // in arrow function ‘this’ points to the window object
-button.addEventListener(‘click’, fn2);
+var fn2 = () => console.log(this); // in arrow function 'this' points to the window object
+button.addEventListener('click', fn2);
 
 // ---- default parameter ----
 
@@ -70,20 +70,20 @@ console.log(isEqualTo(10)); // false
 
 // ---- object literal extension ----
 
-let name = “Anna”;
+let name = "Anna";
 let age = 25;
-let ageField = “age”;
+let ageField = "age";
 
 let obj = {
-    “name”: “Max”,
+    "name": "Max",
     [ageField]: 28,
-    “greet me”() {
-        console.log(this.name + “, ” + this.age);
+    "greet me"() {
+        console.log(this.name + ", " + this.age);
     }
 }
 
 console.log(obj[ageField]); // 28
-obj[“greet me”](); // Max, 28
+obj["greet me"](); // Max, 28
 
 // ---- rest operator ----
 
@@ -111,9 +111,9 @@ for (number of numbers) {
 
 // ---- template literal ----
 
-let name = “max”;
+let name = "max";
 let description = `
-    Hello, I’m ${name + ‘ !!!’}
+    Hello, I'm ${name + ' !!!'}
 `;
 console.log(description);
 
@@ -129,10 +129,10 @@ let b = 10;
 
 // object
 let obj = {
-    name: “Max”,
+    name: "Max",
     age: 27,
     greet: function() {
-        console.log(“Hello there”);
+        console.log("Hello there");
     }
 }
 
@@ -148,7 +148,7 @@ https://github.com/systemjs
 
 <body>
     <script>
-        System.import(‘./script.js’);
+        System.import('./script.js');
     </script>
 </body>
 
@@ -158,15 +158,15 @@ https://github.com/systemjs
 export let keyValue = 1000;
 export function test () {
     keyValue = 2000;
-    console.log(“tested”);
+    console.log("tested");
 }
 // or
 export {keyValue, test};
 
 // script.js
-import {keyValue, test} from ‘./external.js’;
+import {keyValue, test} from './external.js';
 // or
-import * as imported from ‘./external.js’;
+import * as imported from './external.js';
 
 console.log(keyValue); // 1000
 // or
@@ -181,10 +181,10 @@ class Person {
         this.name = name;
     }
     greet()  {
-        console.log(“Hello, my name is ” + this.name);
+        console.log("Hello, my name is " + this.name);
     }
 }
-let person = new Person(“Max”);
+let person = new Person("Max");
 person.greet();
 
 // ---- prototype ----
@@ -195,17 +195,17 @@ class Person {
         this.name = name;
     }
     greet()  {
-        console.log(“Hello, my name is ” + this.name + “ and I am ” + this.age);
+        console.log("Hello, my name is " + this.name + " and I am " + this.age);
     }
 }
 
 class Max extends Person {
     constructor(age) {
-        super(‘Max’);
+        super('Max');
         this.age = age;
     }
     greet()  {
-        console.log(“Hello”);
+        console.log("Hello");
     }
     greetTwice() {
         this.greet(); // Hello
@@ -229,7 +229,7 @@ class Helper {
         console.log(message);
     }
 }
-Helper.log(‘Logged’);
+Helper.log('Logged');
 
 // ---- get / set ----
 
@@ -246,59 +246,59 @@ class Person {
         }
     }
 }
-let person = new Person(“Max”);
-person.name = “Anna Maria”; // won’t work
-Person._name = “Anna Maria”; // will work, no protection
+let person = new Person("Max");
+person.name = "Anna Maria"; // won't work
+Person._name = "Anna Maria"; // will work, no protection
 
 // ---- extend built in object ----
 
 class convertableArray {
     convert() {
         let returnArray = [];
-        this.forEach(value => returnArray.push(‘Converted!’ + value));
+        this.forEach(value => returnArray.push('Converted!' + value));
     }
 }
 let numberArray = new convertableArray();
 numberArray.push(1);
 numberArray.push(2);
 numberArray.push(3);
-console.log(numberArray.convert()); // [“Converted!1”, “Converted!2”, “Converted!3”]
+console.log(numberArray.convert()); // ["Converted!1", "Converted!2", "Converted!3"]
 
 // Symbol
 // ------------------------------------------------------
 
 // ---- symbol ----
 
-let symbol = Symbol(“debug”);
-let anotherSymbol = Symbol(“debug”);
+let symbol = Symbol("debug");
+let anotherSymbol = Symbol("debug");
 console.log(symbol == anotherSymbol); // false
 
 // --
 let obj = {
-    name: ‘max’,
+    name: 'max',
     [symbol]: 22
 }
-console.log(obj); // shows only - name: ‘max’, symbol is not visible
+console.log(obj); // shows only - name: 'max', symbol is not visible
 console.log(obj[symbol]); // 22
 
 // --
-let symbol1 = Symbol.for(‘age’);
-let symbol2 = Symbol.for(‘age’);
+let symbol1 = Symbol.for('age');
+let symbol2 = Symbol.for('age');
 console.log(symbol1 == symbol2); // true
 
 // --
-let symbol = Symbol.for(‘age’);
+let symbol = Symbol.for('age');
 let person = {
-    name: “Max”,
+    name: "Max",
     age: 30
 };
 
 function makeAge() {
-    let ageSymbol = Symbol.for(‘age’);
+    let ageSymbol = Symbol.for('age');
     person[ageSymbol] = 27;
 }
 makeAge(person[symbol]); // 27
-console.log(person[“age”]); // 30
+console.log(person["age"]); // 30
 
 // -- well known symbols --
 class Person {
@@ -306,7 +306,7 @@ class Person {
 let person1 = new Person();
 console.log(person1); // [object object] { ... }
 
-Person.prototype[Symbol.toStringTag] = ‘Person’;
+Person.prototype[Symbol.toStringTag] = 'Person';
 let person2 = new Person();
 console.log(person2); // [object Person] { ... }
 
@@ -316,8 +316,8 @@ console.log(person2); // [object Person] { ... }
 // ---- iterator ----
 
 let person = {
-    Name: ‘Max’,
-    hobbies: [‘Sports’, ‘Cooking’],
+    Name: 'Max',
+    hobbies: ['Sports', 'Cooking'],
     [Symbol.iterator] = function() {
         let i = 0;
         let hobbies = this.hobbies;
@@ -334,7 +334,7 @@ let person = {
     }
 }
 for (let hobby of person) {
-    console.log(hobby); // “Sports” “Cooking”
+    console.log(hobby); // "Sports" "Cooking"
 }
 
 // ---- generator ----
@@ -358,23 +358,23 @@ for (let element of obj) {
 let promise = new Promise(function(resolve, reject) {
     setTimeout(function() {
         If (true) {
-            resolve(‘Done!’);
+            resolve('Done!');
         } else {
-            reject(‘Failed!’);
+            reject('Failed!');
         }
     }, 1500);
 });
 promise.then(function(value) {
-    console.log(value); // “Done!”
+    console.log(value); // "Done!"
 }, function(error) {
-    console.log(error); // “Failed!”
+    console.log(error); // "Failed!"
 });
 
 // --
 function waitASecond(seconds) {
     return new Promise(function(resolve, reject) {
         if (seconds > 2) {
-            reject(‘Rejected!’);
+            reject('Rejected!');
         } else {
             setTimeout(function() {
                 seconds++;
@@ -389,18 +389,18 @@ waiASecond(0)
         console.log(seconds); // 2
     })
     .catch(function(error) {
-        console.log(error); // “‘Rejected!”
+        console.log(error); // "'Rejected!"
     });
 
 // -- all and race
 let promise1 = new Promise(function(resolve, reject) {
     setTimeout(function() {
-        resolve(‘Resolved!’);
+        resolve('Resolved!');
     }, 1000);
 });
 let promise2 = new Promise(function(resolve, reject) {
     setTimeout(function() {
-        resolve(‘Rejected!’);
+        resolve('Rejected!');
     }, 2000);
 });
 // if all are success then resolve will execute, or if any fails then the reject will execute
@@ -410,7 +410,7 @@ Promise.all([promise1, promise2])
     })
     .then(function(error) {
         console.log(error);
-    }); // “Rejected!”
+    }); // "Rejected!"
 // depends on the fastest executed promise
 Promise.race([promise1, promise2])
     .then(function(success) {
@@ -418,7 +418,7 @@ Promise.race([promise1, promise2])
     })
     .then(function(error) {
         console.log(error);
-    }); // “Resolved!”
+    }); // "Resolved!"
 
 // Built-in object extensions
 // ------------------------------------------------------
@@ -442,10 +442,10 @@ console.log(obj);
 
 // --
 let person = {
-    name: “Max”
+    name: "Max"
 };
 let boss = {
-    name: “Anna”
+    name: "Anna"
 };
 Object.setPrototypeOf(person, boss);
 
@@ -456,10 +456,10 @@ console.log(Math.trunc(number)); // 3
 
 // ---- Sting ----
 
-let name = ‘Maximilian’;
-console.log(name.startsWith(“Max”)); // true
-console.log(name.endsWith(“ian”)); // true
-console.log(name.includes(“imi”)); // true
+let name = 'Maximilian';
+console.log(name.startsWith("Max")); // true
+console.log(name.endsWith("ian")); // true
+console.log(name.includes("imi")); // true
 
 // ---- Number ----
 
@@ -483,12 +483,12 @@ let array = Array.of(5, 10, 15);
 console.log(array.find(val => val >= 10)); // 12 // only first occurrence
 
 var inventory = [
-    {name: “apples”, quantity: 2},
-    {name: “bananas”, quantity: 0},
-    {name: “cherries”, quantity: 5}
+    {name: "apples", quantity: 2},
+    {name: "bananas", quantity: 0},
+    {name: "cherries", quantity: 5}
 ];
 function findCherries(fruit) {
-    return fruit.name === ‘cherries’;
+    return fruit.name === 'cherries';
 }
 console.log(inventory.find(findCherries));
 
@@ -507,15 +507,15 @@ for (let element of it) {
 // ---- Map ----
 
 let cardAce = {
-    name: “Ace of Spades”
+    name: "Ace of Spades"
 };
 let cardKing = {
-    name: “King of Clubs”
+    name: "King of Clubs"
 };
 let deck = new Map();
-deck.set(‘as’, cardAce);
-deck.set(‘kc’, cardKing);
-console.log(deck.get(‘as’));
+deck.set('as', cardAce);
+deck.set('kc', cardKing);
+console.log(deck.get('as'));
 for (key of deck.keys()) {
     console.log(key);
 }
@@ -523,10 +523,10 @@ for (entry of deck) {
     console.log(entry);
 }
 deck.clear();
-deck.delete(‘kc’);
+deck.delete('kc');
 
 // ---- WeakMap ----
-// garbage collected, only objects, can’t loop, no size property
+// garbage collected, only objects, can't loop, no size property
 
 let key1 = {a:1};
 let key2 = {a:2};
