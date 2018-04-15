@@ -454,7 +454,7 @@ Object.setPrototypeOf(person, boss);
 let number = 0.78;
 console.log(Math.trunc(number)); // 3
 
-// ---- Sting ----
+// ---- String ----
 
 let name = 'Maximilian';
 console.log(name.startsWith("Max")); // true

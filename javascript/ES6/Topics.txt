@@ -1,0 +1,63 @@
+General / Syntax Changes
+- let
+- const
+- hoisting
+- (fat) arrow function
+- default parameter
+- object literal extensions
+- rest operator
+- spread operator
+- for-of loop
+- template literal
+- deconstructing
+
+Module & Class
+- modules / import / export
+- class
+- prototype
+- static method
+- get / set
+- extend built in object
+
+Symbol
+- symbol
+- well known symbols
+
+Iterator & Generator
+- iterator
+- generator
+
+Promise
+- promise
+- all and race
+
+Built-in object extensions
+- Object
+- Math
+- String
+- Number
+- Array
+
+Map & Set
+- Map
+- WeakMap
+- Set
+- WeakSet
+
+Reflect
+- Reflect.construct()
+- Reflect.apply()
+- Access property
+- Reflect.ownKeys()
+- create & delete property
+- prevent extend
+
+Proxy
+- Proxy
+- Trap
+- revocable proxy
+
+
+
+// Browser Support
+// https://kangax.github.io/compat-table/es6/
