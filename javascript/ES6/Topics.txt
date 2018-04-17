@@ -1,4 +1,4 @@
-General / Syntax Changes
+1. General / Syntax Changes
 - let
 - const
 - hoisting
@@ -11,7 +11,7 @@ General / Syntax Changes
 - template literal
 - deconstructing
 
-Module & Class
+2. Module & Class
 - modules / import / export
 - class
 - prototype
@@ -19,32 +19,32 @@ Module & Class
 - get / set
 - extend built in object
 
-Symbol
+3. Symbol
 - symbol
 - well known symbols
 
-Iterator & Generator
+4. Iterator & Generator
 - iterator
 - generator
 
-Promise
+5. Promise
 - promise
 - all and race
 
-Built-in object extensions
+6. Built-in object extensions
 - Object
 - Math
 - String
 - Number
 - Array
 
-Map & Set
+7. Map & Set
 - Map
 - WeakMap
 - Set
 - WeakSet
 
-Reflect
+8. Reflect
 - Reflect.construct()
 - Reflect.apply()
 - Access property
@@ -52,7 +52,7 @@ Reflect
 - create & delete property
 - prevent extend
 
-Proxy
+9. Proxy
 - Proxy
 - Trap
 - revocable proxy
