@@ -1,0 +1,46 @@
+Node & Angular setup:
+------------------------------------
+1. Visit - https://nodejs.org/en/
+2. Download and install - https://nodejs.org/dist/v8.11.1/node-v8.11.1-x64.msi
+3. cmd > npm install -g @angular/cli
+
+
+New project setup:
+------------------------------------
+1. cmd > move to destination folder, where you want to create your project
+2. cmd > ng new my-first-app
+3. cmd > cd my-first-app
+4. cmd > ng serve    // http://localhost:4200, port can be changed by "ng serve --port {portnumber}"
+
+
+Generate new component:
+------------------------------------
+- ng generate component {componentname} --spec false // OR -- ng g c servers
+
+
+Install bootstrap:
+----------------------------------
+- Browse to app folder and run "npm install --save bootstrap@3"
+- Add reference in ".angular-cli.json" file to "the bootstrap.min.css" file for the new project // "styles": ["../node_modules/bootstrap/dist/css/bootstrap.min.css"]
+
+
+Install Augury (chrome extension for debugging):
+---------------------------------
+- https://augury.angular.io/
+
+Setup syntax highlighting for sublime text:
+---------------------------------
+https://www.youtube.com/watch?v=_zZ0wbx-Ycg
+1. Install package control
+2. Run package control
+3. Type "Install Package"
+4. Type "Typescript" and click
+5. Restart sublime
+6. Reopen the .ts file
+
+
+Install Emmet (html expander) for sublime text:
+---------------------------------
+1. Run package control
+2. Type "Install Package"
+3. Type "Emmet" and click
