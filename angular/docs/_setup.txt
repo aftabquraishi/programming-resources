@@ -18,6 +18,11 @@ Generate new component:
 - ng generate component {componentname} --spec false // OR -- ng g c servers
 
 
+Generate new directive:
+------------------------------------
+- ng generate directive {directivename} --spec false // OR -- ng g d hightlight
+
+
 Install bootstrap:
 ----------------------------------
 - Browse to app folder and run "npm install --save bootstrap@3"

@@ -1,0 +1,24 @@
+1. Components, directives, data binding
+- Components
+- Data Binding
+    - String interpolation // {{}}
+    - Property binding // []=""
+    - Event binding // ()=""
+    - Two-way data binding // [(ngModel)]=""
+- Component Property Binding
+- Component Event Binding
+- Local reference
+- ViewChild
+- ng-content
+- ContentChild
+- Component Lifecycle
+- Directives
+    - Structural Directives
+        - *ngIf
+        - *ngFor
+    - Attribute Directives
+        - ngStyle
+        - ngClass
+        - ngSwitch
+- Custom Attribute Directive
+- Custom Structural Directive
