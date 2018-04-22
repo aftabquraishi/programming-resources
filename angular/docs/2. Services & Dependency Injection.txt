@@ -1,0 +1,88 @@
+Service:
+-----------------------
+// A service is a plain typescript class, and the file is named like loggingservice.service.ts
+
+.ts:
+export class LoggingService {}
+
+
+
+
+
+Dependency Injection:
+-----------------------
+import { LoggingService } from "./logging.service";
+
+@Component({
+    ...,
+    providers: [LoggingService]
+})
+export class MyComponent {
+    constructor(private loggingService: LoggingService) {}
+
+    someMethod() {
+        loggingService.log("Log message");
+    }
+}
+
+
+
+
+
+Hierarchical Injector:
+--------------------------------
+/* A service is instantiated once in one component, it is available in all it's child components.  Usually declared in app.module.ts, that's the highest location.
+In the child components only the "providers" reference should be removed, so that it doesn't create the instance again.
+If we want seperate instances for seperate components we may choose to do so depending on our need. */
+
+
+
+
+
+Use a Service in another Service:
+--------------------------------
+// We can use LogService in the AccountsService. That is, cross-cutting services should be used in the application services.
+// The implementation will work mostly the same way how we do in components.
+
+.ts:
+import { Injectable } from "@angular/core";
+import { LoggingService } from "./logging.service";
+
+@Injectable()
+export class AccountService {
+    constructor(private loggingService: LoggingService) {}
+}
+
+
+
+
+
+Service Events:
+---------------------------
+// cross component communication through service
+
+accountsservice.service.ts:
+---
+import { EventEmitter } from "@angular/core";
+
+export class AccountService {
+    statusUpdated = new EventEmitter<string>();
+}
+
+account.component.ts
+---
+export class AccountComponent {
+    someMethod(status: string) {
+        this.accountService.statusUpdated.emit(status);
+    }
+}
+
+newaccount.component.ts
+---
+export class AccountComponent {
+    constructor() {
+        this.accountService.statusUpdated.subscribe(
+            (status: string) => alert(status)
+        );
+    }
+}

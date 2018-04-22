@@ -1,4 +1,4 @@
-1. Components, directives, data binding
+1. Components, Directives, Data Binding
 - Components
 - Data Binding
     - String interpolation // {{}}
@@ -22,3 +22,10 @@
         - ngSwitch
 - Custom Attribute Directive
 - Custom Structural Directive
+
+2. Services & Dependency Injection
+- Service
+- Dependency Injection
+- Hierarchical Injector
+- Use a Service in another Service
+- Service Events
