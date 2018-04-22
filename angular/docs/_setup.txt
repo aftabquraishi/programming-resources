@@ -29,9 +29,10 @@ Install bootstrap:
 - Add reference in ".angular-cli.json" file to "the bootstrap.min.css" file for the new project // "styles": ["../node_modules/bootstrap/dist/css/bootstrap.min.css"]
 
 
-Install Augury (chrome extension for debugging):
+Install Augury (chrome extension for inspection):
 ---------------------------------
 - https://augury.angular.io/
+
 
 Setup syntax highlighting for sublime text:
 ---------------------------------
