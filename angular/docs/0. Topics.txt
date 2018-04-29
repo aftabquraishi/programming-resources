@@ -1,0 +1,42 @@
+1. Components, Directives, Data Binding
+- Components
+- Data Binding
+    - String interpolation // {{}}
+    - Property binding // []=""
+    - Event binding // ()=""
+    - Two-way data binding // [(ngModel)]=""
+- Component Property Binding
+- Component Event Binding
+- Local reference
+- ViewChild
+- ng-content
+- ContentChild
+- Component Lifecycle
+- Directives
+    - Structural Directives
+        - *ngIf
+        - *ngFor
+    - Attribute Directives
+        - ngStyle
+        - ngClass
+        - ngSwitch
+- Custom Attribute Directive
+- Custom Structural Directive
+
+2. Services & Dependency Injection
+- Service
+- Dependency Injection
+- Hierarchical Injector
+- Use a Service in another Service
+- Service Events
+
+3. Routing
+- Routing
+- Navigating Programmatically
+- Pass Parameters to Route
+- Route Observables
+- Query Parameters
+- Child Routes / Nested Routes
+- Wildcard Routes
+- External Routing File
+- Route Guards (CanActivate, CanActivateChild, CanDeactivate, Resolve)
