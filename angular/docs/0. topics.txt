@@ -29,3 +29,14 @@
 - Hierarchical Injector
 - Use a Service in another Service
 - Service Events
+
+3. Routing
+- Routing
+- Navigating Programmatically
+- Pass Parameters to Route
+- Route Observables
+- Query Parameters
+- Child Routes / Nested Routes
+- Wildcard Routes
+- External Routing File
+- Route Guards (CanActivate, CanActivateChild, CanDeactivate, Resolve)

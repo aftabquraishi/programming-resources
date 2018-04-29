@@ -1,0 +1,404 @@
+Routing
+--------------------------------------
+app.module.ts:
+----
+import { Routes, RouterModule } from '@angular/router';
+
+const appRoutes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'users', component: UsersComponent },
+    { path: 'servers', component: ServersComponent }
+];
+
+@NgModule({
+    imports: [
+        ...,
+        RouterModule.forRoot(appRoutes)
+    ]
+})
+export class AppModule {  }
+
+app.component.html:
+----
+<li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><a routerLink="/">Home</a></li>
+<li routerLinkActive="active"><a routerLink="/users">Users</a></li> // the path should always begin with a "/"
+OR
+<a [routerLink]="['/users']">Users</a>
+
+<router-outlet></router-outlet> // here the components will load
+
+
+
+
+
+Navigating Programmatically
+---------------------------------
+import { Router, ActivatedRoute } from '@angular/router';
+
+export class HomeComponent {
+    constructor(private router: Router, private route: ActivatedRoute) {  }
+
+    someMethod() {
+        router.navigate(['/users']); // points to the root, absolute path
+        OR
+        router.navigate(['/users'], { relativeTo: this.route }); // points to the relative path
+    }
+}
+
+
+
+
+
+Pass Parameters to Route
+--------------------------------------
+app.module.ts:
+----
+const appRoutes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'users', component: UsersComponent },
+    { path: 'users/:id/:name', component: UsersComponent }
+];
+
+user.component.ts:
+----
+import { Router, ActivatedRoute } from '@angular/router';
+
+export class UserComponent implements OnInit {
+    user: { id: number, name: string };
+    constructor(private router: Router, private route: ActivatedRoute) {  }
+
+    ngOnInit() {
+        this.user = {
+            id: this.route.snapshot.params['id'],
+            name: this.route.snapshot.params['name']
+        };
+    }
+}
+
+
+
+
+
+Route Observables
+------------------------------------------------------
+// if we are on a page like "http://localhost:4200/users/10/Max" and try a link on the same page with "http://localhost:4200/users/12/Anna"
+// then the url will change but the page body won't. Because with the same route structure angular can't recognize that it received different data.
+// so in this scenario we have to use the following solution
+
+import { Router, ActivatedRoute, Params } from '@angular/router';
+
+export class UserComponent implements OnInit {
+    user: { id: number, name: string };
+    constructor(private router: Router, private route: ActivatedRoute) {  }
+    ngOnInit() {
+        this.user = {
+            id: this.route.snapshot.params['id'],
+            name: this.route.snapshot.params['id']
+        };
+        this.route.params.subscribe(  // Route Observable
+            (params: Params) => {
+                this.user.id = params['id'];
+                this.user.name = params['name'];
+            }
+        );
+    }
+}
+
+
+
+
+
+Query Parameters
+------------------------------------------------------
+app.module.ts:
+----
+const appRoutes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'servers', component: ServersComponent },
+    { path: 'servers/:id/edit', component: EditServerComponent }  // add a new route
+];
+
+servers.component.html:
+----
+<a
+    [routerLink]="['/servers', 5, 'edit']"
+    [queryParams]="{ allowEdit: '1' }"
+    fragment="loading">
+    {{ server.name }}
+</a>
+
+servers.component.ts:
+----
+this.router.navigate(['/servers', id, 'edit'], { queryParams: { allowEdit: '1' }, fragment: 'loading' });  // http://localhost:4200/servers/5/edit?allowEdit=1#loading
+
+edit-server.component.ts:
+----
+import { Router, ActivatedRoute } from '@angular/router';
+
+export class EditServerComponent implements OnInit {
+    server: { id: number, name: string, status: string };
+    serverName = '';
+    serverStatus = '';
+    constructor(private router: Router, private route: ActivatedRoute) {  }
+
+    ngOnInit() {
+            console.log(this.route.snapshot.queryParams);
+            console.log(this.route.snapshot.fragment);
+            this.route.queryParams.subscribe();
+            this.route.fragment.subscribe();
+    }
+}
+
+
+
+
+
+Child Routes / Nested Routes
+------------------------------------------------------
+app.module.ts:
+----
+const appRoutes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'users', component: UsersComponent, children: [
+        { path: ':id', component: UserDetailComponent },  // child of 'users'
+        { path: ':id/edit', component: EditUserComponent }
+    ] }
+];
+
+users.component.html:
+----
+<router-outlet></router-outlet>
+
+user.component.ts:
+----
+router.navigate(['edit'], { relativeTo: this.route, queryParamsHandling: 'preserve' }); // queryParamsHandling is used to preserve the additional parameters, may be helpful in some scenarios
+
+
+
+
+
+Wildcard Routes:
+--------------------------------------------------
+app.module.ts:
+----
+const appRoutes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'users', component: UsersComponent, children: [
+        { path: ':id', component: UserDetailComponent },
+        { path: ':id/edit', component: EditUserComponent }
+    ] },
+    { path: 'not-found', component: PageNotFoundComponent },
+    { path: '**', redirectTo: '/not-found' }  // should be the last entry
+];
+
+
+
+
+
+External Routing File:
+---------------------------------------------------
+app-routing.module.ts:
+----
+const appRoutes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'users', component: UsersComponent, children: [
+        { path: ':id', component: UserDetailComponent },
+        { path: ':id/edit', component: EditUserComponent }
+    ] },
+    { path: 'not-found', component: PageNotFoundComponent },
+    { path: '**', redirectTo: '/not-found' } // should be the last path
+];
+
+@NgModule({
+    imports: [
+        RouterModule.forRoot(appRoutes)
+    ],
+    exports: [
+        RouterModule
+    ]
+})
+export class AppRoutingModule {
+
+}
+
+app.module.ts:
+----
+@NgModule({
+    imports: [
+        ...,
+        AppRoutingModule
+    ]
+})
+export class AppModule {  }
+
+
+
+
+
+Route Guards:
+--------------------------------------
+CanActivate, CanActivateChild:
+------------------
+auth.service.ts
+----
+export class AuthService {
+    loggedIn = false;
+    isAuthenticated() {
+        const promise = new Promise(
+            (resolve, reject) => {
+                setTimeout(() => { resolve(this.loggedIn) }, 1000);
+            }
+        );
+        return promise;
+    }
+    login() {
+        loggedIn = true;
+    }
+    logout() {
+        loggedIn = false;
+    }
+}
+
+auth-guard.service.ts
+----
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router, CanActivateChild } from '@angular/router';
+import { Observable } from '@rxjs/Observable';
+
+@Injectable()
+export class AuthGuard implements CanActivate, CanActivateChild {
+    constructor(private authService: AuthService, private router: Router) {}
+    canActivate(route: ActivatedRouteSnapshot,
+                            state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+        return this.authService.isAuthenticated()
+            .then(
+                (authenticated: boolean) => {
+                    if (authenticated) {
+                        return true;
+                    } else {
+                        this.router.navigate(['/']);
+                    }
+                }
+            );
+    }
+    canActivateChild(route: ActivatedRouteSnapshot,
+                            state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+        return this.canActivate(route, state);
+    }
+}
+
+app-routing.module.ts:
+----
+const appRoutes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'users', canActivate[AuthGuard], canActivateChild[AuthGuard], component: UsersComponent, children: [
+        { path: ':id', component: UserDetailComponent },
+        { path: ':id/edit', component: EditUserComponent }
+    ] },
+    { path: 'not-found', component: PageNotFoundComponent },
+    { path: '**', redirectTo: '/not-found' } // should be the last path
+];
+
+app.module.ts:
+----
+@NgModule({
+    providers: [ AuthService, AuthGuard ]
+})
+export class AppModule {  }
+
+
+CanDeactivate
+------------------
+can-deactivate-guard.service.ts
+----
+export interface CanComponentDeactivate {
+    canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+}
+
+export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
+    canDeactivate(component: CanComponentDeactivate, 
+        currentRoute: ActivatedRouteSnapshot, 
+        currentState: RouterStateSnapshot,
+        nextState?: RouterStateSnapshot):  () => Observable<boolean> | Promise<boolean> | boolean {
+            return component.canDeactivate();
+        }
+}
+
+app-routing.module.ts:
+----
+const appRoutes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'users', canActivate[AuthGuard], canActivateChild[AuthGuard], component: UsersComponent, children: [
+        { path: ':id', component: UserDetailComponent },
+        { path: ':id/edit', component: EditUserComponent, canDeactivate: [CanDeactivateGuard] } // add the guard here
+    ] },
+    { path: 'not-found', component: PageNotFoundComponent },
+    { path: '**', redirectTo: '/not-found' } // should be the last path
+];
+
+app.module.ts:
+----
+@NgModule({
+    providers: [ AuthService, AuthGuard,  CanDeactivateGuard]
+})
+export class AppModule {  }
+
+edit-server-component.ts:
+----
+export class EditServerComponent implements CanComponentDeactivate  {
+    canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+        if (this.serverName !== this.server.name && !this.changesSaved) {
+            return confirm('Do you want to discard the changes?');
+        } else {
+            return true;
+        }
+    }
+}
+
+
+Resolve Guard // use it when you need to make some async call before the component loading
+----------------------------------------
+server-resolver-service.ts
+----
+interface Server {
+    id: number;
+    name: string;
+    status: string;
+}
+
+export class ServerResolver implements Resolve<Server> {
+    resolve(route: ActivatedRouteSnapshot,
+                    state: RouterStateSnapshot): Observable<Server> | Promise<Server> | Server {
+        return this.RemoteService.getServer(id);  // asynchronous call
+    }
+}
+
+app.module.ts:
+----
+@NgModule({
+    providers: [ ServerResolverService ]
+})
+export class AppModule {  }
+
+app-routing.module.ts:
+----
+const appRoutes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'users', canActivate[AuthGuard], canActivateChild[AuthGuard], component: UsersComponent, children: [
+        { path: ':id', component: UserDetailComponent, resolve: {server: ServerResolver } },  // add the guard here
+        { path: ':id/edit', component: EditUserComponent} 
+    ] },
+    { path: 'not-found', component: PageNotFoundComponent },
+    { path: '**', redirectTo: '/not-found' } // should be the last path
+];
+
+server.component.ts:
+----
+export class ServerComponent {
+    ngOnInit() {
+        this.route.data.subscribe(
+            (data: Data) => {
+                this.server = data['server'];  // access the resolved data here
+            }
+        );
+    }
+}
