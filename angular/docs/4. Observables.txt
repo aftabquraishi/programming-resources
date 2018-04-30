@@ -1,0 +1,124 @@
+Observable & Observer
+---------------------------------------------------
+Observable: various data sources (- Observable pattern, - rxjs: third party package)
+Observer: works with the Observable
+Three ways to handle data packages: Handle Data, Handle Error, Handle Completion (our code)
+http://reactivex.io/rxjs
+
+
+
+Custom Observable
+-----------------------------------------------------
+Example 1
+---------------
+import { OnDestroy } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/Rx';
+
+@Component({
+    ...
+})
+export class HomeComponent implements OnInit, OnDestroy {
+    numbersObservableSubscription: Subscription;
+    ngOnInit() {
+        const myNumbers = Observable.interval(1000);
+        this.numbersObservableSubscription = myNumbers.subscribe(
+            (number: number) => {
+                console.log(number);  // 1 2 3 4 ....  // keeps running and will create a memory leak if not unsubscribed
+            }
+        );
+    }
+    ngOnDestroy() {
+        this.numbersObservableSubscription.unsubscribe();
+    }
+}
+
+Example 2:
+--------------------
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/Rx';
+import { Observer } from 'rxjs/Observer';
+
+@Component({
+    ...
+})
+export class HomeComponent implements OnInit {
+    ngOnInit() {
+        const myObservable = Observable.create((observer: Observer<string>) => {
+            setTimeout(() => {
+                observer.next('First Package');
+            }, 2000);
+            setTimeout(() => {
+                observer.next('Second Package');
+            }, 4000);
+            setTimeout(() => {
+                observer.error('This does not work');
+                //--  OR  --
+                observer.complete();
+            }, 5000);
+        });
+        myObservable.subscribe(
+            (data: string) => { console.log(data); },
+            (error: string) => { console.log(error); },
+            () => { console.log('completed'); }
+        );
+    }
+}
+
+
+
+
+
+Subject
+-----------------------------------------------------
+// works like event
+users.service.ts
+----
+import { Subject } from 'rxjs/Subject';
+
+export class UsersService {
+    userActivated = new Subject();
+}
+
+user.component.html
+----
+<button (click)='onActivate()'>Activate!</button>
+
+user.component.ts
+----
+import { UsersService } from '../users.service';
+
+export class UserComponent {
+    constructor(private usersService: UsersService) {}
+    onActivate() {
+        this.usersService.userActivated.next(this.id);
+    }
+}
+
+app.component.html
+----
+<div>
+    <a routerLink="/">Home</a>
+    <a [routerLink]="['user', 1]">User 1 {{ user1Activated ? '(activated)' : '' }}</a>
+    <a [routerLink]="['user', 2]">User 2 {{ user2Activated ? '(activated)' : '' }}</a>
+</div>
+
+app.component.ts
+----
+export class AppComponent implements OnInit {
+    user1Activated = false;
+    user1Activated = false;
+    constructor(private usersService: UsersService) {}
+    ngOnInit() {
+        this.usersService.userActivated.subscribe(
+            (id: number) => {
+                if (id === 1) {
+                    this.user1Activated = true;
+                } else if (id === 2) {
+                    this.user2Activated = true;
+                }
+            }
+        );
+    }
+}

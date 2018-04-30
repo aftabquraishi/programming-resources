@@ -40,3 +40,8 @@
 - Wildcard Routes
 - External Routing File
 - Route Guards (CanActivate, CanActivateChild, CanDeactivate, Resolve)
+
+4. Observables
+- Observable & Observer
+- Custom Observable
+- Subject
