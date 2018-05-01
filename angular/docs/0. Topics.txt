@@ -45,3 +45,19 @@
 - Observable & Observer
 - Custom Observable
 - Subject
+
+5. Forms
+- Forms Approaches
+- Template-Driven (TD) Form
+- TD: Add Validation
+- TD: Set Default Value & Two-way Data Binding
+- TD: Group Form Fields
+- TD: Handle Radio Button
+- TD: Set & Patch Form Values
+- TD: Reset Form
+- Reactive Form
+- Reactive: Add Validation
+- Reactive: Group Controls
+- Reactive: Add Controls Dynamically
+- Reactive: Custom Validator
+- Reactive: Custom Async Validator
