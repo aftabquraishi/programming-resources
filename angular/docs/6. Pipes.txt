@@ -1,0 +1,123 @@
+Pipes:
+------------------------------
+Customize rendering the output in the view.
+Use | (pipe) symbol to do that.
+
+Example:
+{{ name | uppercase }} // value "Max" is outputted as "MAX"
+
+
+
+
+
+Parameterize pipes
+---------------------------------------------
+{{ startDate | date:'fullDate' }}
+
+
+
+
+
+Built-in pipes
+---------------------------------------------
+https://angular.io/api?query=pipe
+
+
+
+
+
+Chain multiple pipes
+---------------------------------------------
+{{ startDate | date:'fullDate' | uppercase }}
+
+
+
+
+
+Create custom pipe
+---------------------------------------------
+shorten.pipe.ts
+----
+import { PipeTransform, Pipe } from "@angular/core":
+
+@Pipe({
+    name: 'shorten'
+})
+export class ShortenPipe implements PipeTransform {
+    transform(value: any, limit: number) {
+        if (value.length > limit) {
+            return value.substr(0, limit) + " ...";
+        }
+        return value;
+    }
+}
+
+app.module.ts
+----
+import { ShortenPipe } from "./shorten.pipe";
+
+@NgModule({
+    declarations: {
+        ShortenPipe
+    }
+})
+export class AppModule {}
+
+app.component.html
+----
+{{ name | shorten:10 }}
+
+
+
+
+
+Another custom pipe example
+---------------------------------------------
+filter.pipe.ts
+----
+import { PipeTransform, Pipe } from "@angular/core":
+
+@Pipe({
+    name: 'filter',
+    pure: false  // this causes the filter to run if there is any change in the input value, this will cause performance issue, so double check before use
+})
+export class FilterPipe implements PipeTransform {
+    transform(value: any, filterString: string, propName: string) {
+        if (value.length === 0 || filterString === '') {
+            return value;
+        }
+        const resultArray = [];
+        for (const item of value) {
+            if (item[propName] === filterString) {
+                resultArray.push(item);
+            }
+        }
+        return resultArray;
+    }
+}
+
+app.module.ts
+----
+import { FilterPipe } from "./filter.pipe";
+
+@NgModule({
+    declarations: {
+        FilterPipe
+    }
+})
+export class AppModule {}
+
+app.component.ts
+----
+export class AppComponent {
+    filteredStatus = '';
+}
+
+app.component.html
+----
+<input type="text" [(ngModel)]="filteredStatus">
+<ul>
+    <li *ngFor="let order of orders | filter:filteredStatus:'status'">
+        {{ order.id }}
+    </li>
+</ul>

@@ -15,12 +15,17 @@ New project setup:
 
 Generate new component:
 ------------------------------------
-- ng generate component {componentname} --spec false // OR -- ng g c servers
+- ng generate component {component_name} --spec false // OR -- ng g c {component_name}
 
 
 Generate new directive:
 ------------------------------------
-- ng generate directive {directivename} --spec false // OR -- ng g d hightlight
+- ng generate directive {directive_name} --spec false // OR -- ng g d {directive_name}
+
+
+Generate new pipe:
+------------------------------------
+- ng generate pipe {pipe_name} --spec false // OR -- ng g p {pipe_name}
 
 
 Install bootstrap:

@@ -61,3 +61,11 @@
 - Reactive: Add Controls Dynamically
 - Reactive: Custom Validator
 - Reactive: Custom Async Validator
+
+6. Pipes
+- Pipes
+- Parameterize pipes
+- Built-in pipes
+- Chain multiple pipes
+- Create custom pipe
+- Another custom pipe example
