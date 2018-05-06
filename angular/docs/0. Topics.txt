@@ -69,3 +69,6 @@
 - Chain multiple pipes
 - Create custom pipe
 - Another custom pipe example
+
+7. Http
+- Http request example

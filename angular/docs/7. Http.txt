@@ -1,0 +1,86 @@
+Http request example:
+----------------------------------------
+order.service.ts
+----
+import { Injectable } from '@angular/core';
+import { Http, Headers, Response } from '@angular/http';
+import 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
+
+@Injectable()
+export class OrderService {
+    constructor (private http: Http) { }
+    storeOrders(orders: any[]) {
+        const headers = new Headers({'Content-Type': 'application/json'});  // it's not required here, but included to demonstrate how to use headers
+        return this.http.post('https://my-project.firebaseio.com/data.json', orders, { headers: headers });
+    }
+    getOrders() {
+        this.http.get('https://my-project.firebaseio.com/data.json')
+            .map(
+                (response: Response) => {
+                    const data = response.json();
+                    return data;
+                }
+            )
+            .catch(
+                (error: Response) => {
+                    console.log(error);
+                    return Observable.throw('Something went wrong!');
+                }
+            );
+    }
+    getAppName() {
+        this.http.get('https://my-project.firebaseio.com/appName.json')
+            .map(
+                (response: Response) => {
+                    return response.json();
+                }
+            );
+    }
+}
+
+app.module.ts
+----
+import { HttpModule } from '@angular/http';
+import { OrderService } from './order.service';
+
+@NgModule({
+    imports: [ HttpModule ],
+    providers: [ OrderService ]
+})
+
+app.component.html
+----
+<h1>{{ appName | async }}</h1>
+<input type="text" name="productName" #productName></input>
+<button (click)="onAdd(productName.value)">Add Order</button>
+<button (click)="onSave()">Save Orders</button>
+<button (click)="onGet()">Get Orders</button>
+
+app.component.ts
+----
+import { Response } from '@angular/http';
+import { OrderService } from './order.service';
+
+export class AppComponent {
+    orders = [];
+    appName = this.orderService.getAppName();
+    constructor(private orderService: OrderService) {}
+    onAdd(productName: string) {
+        orders.push({ productName });
+    }
+    onSave() {
+        this.orderService.storeOrders(this.orders)
+            .subscribe(
+                (response) => console.log(response),
+                (error) => console.log(error)
+            );
+    }
+    onGet() {
+         this.orderService.storeOrders(this.orders)
+            .subscribe(
+                (orders: any[]) => this.orders = orders,
+                (error) => console.log(error)
+            );
+    }
+}
