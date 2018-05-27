@@ -1,0 +1,34 @@
+D:\Documents\Sandbox\nodejs>npm init   // move to the app folder and create new package.json file
+name: nodejs-test-app
+version: (1.0.0)
+description: NodeJS Test App
+entry point: (app.js)
+test command: 
+git repository: 
+keywords: 
+author: 
+license: (ISC)
+{
+    "name": "nodejs-test-app",
+    "version": "1.0.0",
+    "description": "NodeJS Test App",
+    "main": "app.js"
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "(ISC)"
+}
+
+Is this ok? (yes)
+D:\Documents\Sandbox\nodejs>npm test
+...
+"Error: no test specified"
+...
+
+D:\Documents\Sandbox\nodejs>npm install moment --save   // install moment package and add entry in the package.json file
+D:\Documents\Sandbox\nodejs>npm install   // install all the packages required for this app. do this when node_modules folder is empty
+D:\Documents\Sandbox\nodejs>npm install jasmine-node --save-dev   // add a development dependency, for packages that are only required development
+D:\Documents\Sandbox\nodejs>npm install -g nodemon   // install it globally to make it available for all the apps
+D:\Documents\Sandbox\nodejs>npm update   // to update all the packages
+D:\Documents\Sandbox\nodejs>nodemon app.js   // nodemon watches file changes in the app

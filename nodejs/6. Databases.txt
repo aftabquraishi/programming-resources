@@ -1,0 +1,92 @@
+Access MySql (using mysql module):
+-------------------------------
+app.js
+----
+// >npm install mysql --save
+
+var express = require('express');
+var app = express();
+var mysql = require('mysql');
+
+var port = process.env.PORT || 3000;
+
+app.use('/', function(req, res, next) {
+    var con = mysql,createConnection({
+        host: "localhost",
+        user: "test",
+        password: "test",
+        database: "addressbook"
+    });
+
+    con.query('SELECT * FROM People', 
+        function(err, rows) {
+            if (err) throw err;
+            console.log(rows);
+        }
+    );
+
+    next();
+});
+
+app.listen(port);
+
+
+
+
+
+Access MongoDB (using mongoose module):
+-------------------------------
+app.js
+----
+// >npm install mongoose --save
+
+var express = require('express');
+var app = express();
+var mongoose = require('mongoose');
+
+var port = process.env.PORT || 3000;
+
+mongoose.connect('mongodb://test:test@ds...30.mongolab.com:47030/addressbook');
+
+var Schema = mongoose.Schema;
+
+var personSchema = new Schema({
+    firstname: string,
+    lastname: string,
+    address: string
+});
+
+var Person = mongoose.model('Person', personSchema);
+
+var john = Person({
+    firstname: 'John',
+    lastname: 'Doe',
+    address: '555 Main St.'
+});
+
+john.save(function(err) {
+    if (err) throw err;
+    console.log('Person saved!');
+});
+
+var jane = Person({
+    firstname: 'Jane',
+    lastname: 'Doe',
+    address: '555 Main St.'
+});
+
+jane.save(function(err) {
+    if (err) throw err;
+    console.log('Person saved!');
+});
+
+app.use('/', function(req, res, next) {
+    Person.find({}, function(err, users) {
+        if (err) throw err;
+        console.log(users);
+    });
+
+    next();
+});
+
+app.listen(port);

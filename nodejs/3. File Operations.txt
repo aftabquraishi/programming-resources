@@ -1,0 +1,24 @@
+Read from and Write to files:
+------------------------------------------
+app.js
+----
+var fs = require('fs');
+var readable = fs.createReadStream(__dirname + 'greet.txt', { encoding: 'utf8', highWaterMark: 16 * 1024 });
+var writable = fs.createWriteStream(__dirname + 'greetcopy.txt');
+readable.on('data', function(chunk) {
+    console.log(chunk);
+    writable.write(chunk);
+})
+
+
+
+
+
+Read from and Write to files using Pipe:
+------------------------------------------
+app.js
+----
+var fs = require('fs');
+var readable = fs.createReadStream(__dirname + 'greet.txt');
+var writable = fs.createWriteStream(__dirname + 'greetcopy.txt');
+readable.pipe(writable);

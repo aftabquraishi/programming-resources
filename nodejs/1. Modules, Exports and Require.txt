@@ -1,0 +1,99 @@
+Module Patterns:
+-------------------------
+
+Pattern 1
+---------------------------
+greet.js
+----
+var greet = function() {
+    console.log('Hello!');
+}
+module.exports = greet;
+
+app.js
+----
+var greet = require('./greet');  // greet.js will also work
+greet();
+
+Pattern 2:
+---------------------------
+greet.js
+----
+module.exports.greet = function() {
+    console.log('Hello!');
+}
+
+app.js
+----
+var greet = require('./greet').greet;
+greet();
+
+Pattern 3:
+---------------------------
+greet.js
+----
+function Greetr() {
+    this.greeting = 'Hello!';
+    this.greet = function() {
+        console.log(this.greeting);
+    }
+}
+
+module.exports = new Greetr();
+
+app.js
+----
+var greetr = require('./greet');  // this object will be cached. so, subsequent usage will get previous state
+greetr.greet();
+
+Pattern 4:
+---------------------------
+greet.js
+----
+function Greetr() {
+    this.greeting = 'Hello!';
+    this.greet = function() {
+        console.log(this.greeting);
+    }
+}
+
+module.exports = Greetr;
+
+app.js
+----
+var Greetr = require('./greet');
+var grtr = new Greetr();
+grtr.greet();
+
+Pattern 5:
+---------------------------
+greet.js
+----
+var greeting  = 'Hello!';
+var greet = function() {
+    console.log(greeting);
+}
+
+// Revealing Module Pattern (most preferred)
+module.exports = {
+    greet: greet
+}
+
+app.js
+----
+var greetr = require('./greet');
+greetr.greet();
+
+
+
+
+
+Use native modules:
+-------------------------------------------
+// https://nodejs.org/dist/latest-v10.x/docs/api/
+app.js
+----
+var util = require('util');
+var name = 'Tony';
+var greeting = util.format('Hello, %s', name);
+util.log(greeting);

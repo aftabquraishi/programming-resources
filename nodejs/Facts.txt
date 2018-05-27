@@ -1,0 +1,5 @@
+- Node is written in C++.
+- V8 (javascript engine) is written in C++.
+- Javascript is synchronous, node is asynchronous.
+- Node was originally invented by Ryan Dahl and in a company named Joyent.
+- Using Visual Studio Code (code.visualstudio.com) it's possible to debug the node.js code.

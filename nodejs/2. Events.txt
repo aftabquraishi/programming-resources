@@ -1,0 +1,127 @@
+Events:
+------------------------------
+Types of events
+- System events (C++ core, libuv)
+- Custom events (javascript core, Event Emitter)
+
+
+
+
+
+Custom event emitter:
+------------------------------------
+emitter.js
+----
+function Emitter() {
+    this.events = {};
+}
+
+Emitter.prototype.on = function(type, listener) {
+    this.events.[type] = this.events[type] || [];
+    this.events.[type].push(listener);
+}
+
+Emitter.prototype.emit = function(type) {
+    if (this.events[type]) {
+        this.events[type].forEach(function(listener) {
+            listener();
+        });
+    }
+}
+
+module.exports = Emitter;
+
+app.js:
+----
+var Emitter = require('./emitter');
+var emtr = new Emitter();
+
+emtr.on('greet', function() {
+    console.log('Somewhere, someone said hello.');
+});
+
+emtr.on('greet', function() {
+    console.log('A greeting occured!');
+});
+
+console.log('Hello!');
+emtr.emit('greet');
+
+
+
+
+
+Node event emitter:
+----------------------
+app.js:
+----
+var Emitter = require('events');
+var emtr = new Emitter();
+
+emtr.on('greet', function() {
+    console.log('Somewhere, someone said hello.');
+});
+
+emtr.on('greet', function() {
+    console.log('A greeting occured!');
+});
+
+console.log('Hello!');
+emtr.emit('greet');
+
+
+
+
+
+Inherit from event emitter:
+----------------------
+app.js:
+----
+var EventEmitter = require('events');
+var util = require('util');
+
+function Greetr() {
+    EventEmitter.call(this);
+    this.greeting = 'Hello World!';
+}
+util.inherits(Greetr, EventEmitter);
+
+Greetr.prototype.greet = function(data) {
+    console.log(this.greeting + ': ' + data);
+    this.emit('greet', data);
+}
+
+var greetr1 = new Greetr();
+greetr1.on('greet', function(data) {
+    console.log('Someone greeted!: ' + data);
+});
+greetr1.greet('Tony');
+
+
+
+
+
+Inherit from event emitter using ES6 class:
+----------------------
+app.js:
+----
+'use strict';
+var EventEmitter = require('events');
+
+class Greetr extends EventEmitter {
+    constructor() {
+        super();
+        this.greeting = 'Hello World!';
+    }
+
+    greet(data) {
+        console.log(this.greeting + ': ' + data);
+        this.emit('greet', data);
+    }
+}
+
+var greetr1 = new Greetr();
+greetr1.on('greet', function(data) {
+    console.log('Someone greeted!: ' + data);
+});
+greetr1.greet('Tony');
