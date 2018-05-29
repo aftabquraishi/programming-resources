@@ -1,0 +1,2 @@
+node >npm init   // with all empty values
+node >npm install --save mocha nodemon mongoose

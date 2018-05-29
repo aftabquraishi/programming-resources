@@ -1,0 +1,6 @@
+1. Download MongoDB community server (version 3.2 for windows 7) from https://www.mongodb.com/download-center?jmp=nav#community
+2. Download compass community edition from https://www.mongodb.com/download-center?filter=community#compass
+3. Install MongoDB.
+4. Install Compass.
+5. Cmd >md \data\db
+6. Cmd > "C:\Program Files\MongoDB\Server\3.2\bin\mongod.exe"
