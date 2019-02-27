@@ -1,0 +1,354 @@
+Component:
+-----------------------------------------------------
+An example component:
+--------------------
+App.js // create the component
+---
+import React, { Component } from 'react';
+import './App.css';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <h1>Hi, I'm a React App</h1>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+index.js // use the component in another page
+---
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+
+ReactDOM.render(<App />, document.getElementById('root'));
+serviceWorker.unregister();
+
+
+
+A barebone component:
+--------------------
+Person.js
+---
+import React from 'react';
+
+const person = () => {
+    return <p>I'm a Person and I am {Math.floor(Math.random() * 30)} years old</p>
+}
+
+export default person;
+
+App.js
+---
+import React, { Component } from 'react';
+import './App.css';
+import Person from './Person/Person';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <h1>Hi, I'm a React App</h1>
+        <Person />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+
+Passing value with Props:
+--------------------
+Person.js
+---
+import React from 'react';
+
+const person = (props) => {
+    return <p>I'm {props.name} and I am {props.age} years old</p> // use this.props when using class based component
+}
+
+export default person;
+
+App.js
+---
+import React, { Component } from 'react';
+import './App.css';
+import Person from './Person/Person';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <h1>Hi, I'm a React App</h1>
+        <Person name="Max" age="28" />
+        <Person name="Manu" age="29" />
+        <Person name="Stephanie" age="26" />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+
+Use childen property to access the inner text
+--------------------
+Person.js
+---
+import React from 'react';
+
+const person = (props) => {
+    return (
+        <div>
+            <p>I'm {props.name} and I am {props.age} years old</p>
+            <p>{props.children}</p> // props.children outputs "My Hobbies: Racing"
+        </div>
+    );
+}
+
+export default person;
+
+App.js
+---
+import React, { Component } from 'react';
+import './App.css';
+import Person from './Person/Person';
+
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <h1>Hi, I'm a React App</h1>
+        <Person name="Max" age="28" />
+        <Person name="Manu" age="29">My Hobbies: Racing</Person>
+        <Person name="Stephanie" age="26" />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+
+Storing data using state:
+--------------------
+Person.js
+---
+...
+
+
+App.js
+---
+import React, { Component } from 'react';
+import './App.css';
+import Person from './Person/Person';
+
+class App extends Component {
+  // can use state only in classes which are extnded from Component
+  // react rerenders the page if state changes
+  // components which has states are called containers
+  state = {
+    persons: [
+      { name: "Max", age: 28 },
+      { name: "Manu", age: 29 },
+      { name: "Stephanie", age: 26 }
+    ]
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <h1>Hi, I'm a React App</h1>
+        <Person name={this.state.persons[0].name} age={this.state.persons[0].age} />
+        <Person name={this.state.persons[1].name} age={this.state.persons[1].age}>My Hobbies: Racing</Person>
+        <Person name={this.state.persons[2].name} age={this.state.persons[2].age} />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+
+Handling event:
+--------------------
+Person.js
+---
+...
+
+App.js
+---
+import React, { Component } from 'react';
+import './App.css';
+import Person from './Person/Person';
+
+class App extends Component {
+  state = {
+    persons: [
+      { name: "Max", age: 28 },
+      { name: "Manu", age: 29 },
+      { name: "Stephanie", age: 26 }
+    ]
+  };
+
+  switchNameHandler = () => {
+    console.log("Was clicked!");
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <h1>Hi, I'm a React App</h1>
+        <button onClick={this.switchNameHandler}>Switch Name</button>
+        <Person name={this.state.persons[0].name} age={this.state.persons[0].age} />
+        <Person name={this.state.persons[1].name} age={this.state.persons[1].age}>My Hobbies: Racing</Person>
+        <Person name={this.state.persons[2].name} age={this.state.persons[2].age} />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+
+Pass method as a reference:
+--------------------
+Person.js
+---
+import React from 'react';
+
+const person = (props) => {
+    return (
+        <div>
+            <p onClick={props.click}>I'm {props.name} and I am {props.age} years old</p> // props.click fires the event that was passed to this component
+            <p>{props.children}</p>
+        </div>
+    );
+}
+
+export default person;
+
+App.js
+---
+import React, { Component } from 'react';
+import './App.css';
+import Person from './Person/Person';
+
+class App extends Component {
+  state = {
+    persons: [
+      { name: "Max", age: 28 },
+      { name: "Manu", age: 29 },
+      { name: "Stephanie", age: 26 }
+    ]
+  };
+
+  switchNameHandler = () => {
+    this.setState( {
+      persons: [
+        { name: "Maximilian", age: 28 },
+        { name: "Manu", age: 29 },
+        { name: "Stephanie", age: 27 }
+      ]
+    } );
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <h1>Hi, I'm a React App</h1>
+        <button onClick={this.switchNameHandler}>Switch Name</button>
+        <Person 
+          name={this.state.persons[0].name} 
+          age={this.state.persons[0].age} />
+        <Person 
+          name={this.state.persons[1].name} 
+          age={this.state.persons[1].age} 
+          click={this.switchNameHandler}> // pass this.switchNameHandler method as a reference to the click property
+            My Hobbies: Racing</Person>
+        <Person 
+          name={this.state.persons[2].name} 
+          age={this.state.persons[2].age} />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+
+Pass parameter to method:
+--------------------
+Person.js
+---
+...
+
+App.js
+---
+import React, { Component } from 'react';
+import './App.css';
+import Person from './Person/Person';
+
+class App extends Component {
+  state = {
+    persons: [
+      { name: "Max", age: 28 },
+      { name: "Manu", age: 29 },
+      { name: "Stephanie", age: 26 }
+    ]
+  };
+
+  switchNameHandler = (newName) => {
+    this.setState( {
+      persons: [
+        { name: newName, age: 28 },
+        { name: "Manu", age: 29 },
+        { name: "Stephanie", age: 27 }
+      ]
+    } );
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <h1>Hi, I'm a React App</h1>
+        <button onClick={() => this.switchNameHandler('Maximilian!!')}>Switch Name</button> // one way of passing the parameter; not recommended due to performance issue
+        <Person 
+          name={this.state.persons[0].name} 
+          age={this.state.persons[0].age} />
+        <Person 
+          name={this.state.persons[1].name} 
+          age={this.state.persons[1].age} 
+          click={this.switchNameHandler.bind(this, 'Max!')}>My Hobbies: Racing</Person> // should be done this way
+        <Person 
+          name={this.state.persons[2].name} 
+          age={this.state.persons[2].age} />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+
+
+
+
+
+
+
+1. Container/Class components (statefull)
+2. Functional components (stateless)

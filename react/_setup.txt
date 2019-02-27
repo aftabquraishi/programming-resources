@@ -1,0 +1,24 @@
+Build Workflow for a react app:
+----------------------------------------------------------
+Tools needed to work with react:
+- Dependency Management: npm or yarn
+- Bundler (bundle css and js): Webpack
+- Compiler (compiles ES6+ to vanilla js for older browsers): Babel + Presets
+- Development Server
+
+All the above can be installed using create-react-app:
+https://github.com/facebook/create-react-app
+
+Run the following command in node.js command prompt:
+$ npm install create-react-app -g
+or for linux:
+$ sudo npm install create-react-app -g
+
+Create a new app:
+$ create-react-app react-complete-guide
+
+Move inside new app directory:
+$ cd react-complete-guide
+
+Start the app:
+$ npm start ("Ctrl + c" to exit)
