@@ -1,0 +1,399 @@
+
+// include in page
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.9/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-route/1.7.9/angular-route.min.js"></script>
+<script type="text/javascript" src="app.js"></script>
+
+AngularJS process:
+1. AngularJS is included & executed
+2. Angular Module gets created (if any)
+3. Finds 'templates'
+4. Process 'template'
+    - Compiles template
+    - Loads template
+    - Transforms template with data
+5. Renders to DOM tree (View)
+
+
+
+
+Module
+----------------------------
+.js
+-----
+var app = angular.module('app', []).run(['$rootScope', function($rootScope){}]);
+
+.html
+-----
+<body ng-app='app'></body>
+
+
+
+
+
+
+Controller
+----------------------------
+.js
+-----
+app.controller('testController', ['$scope', function($scope) {}]);
+
+.html
+-----
+<div ng-controller='testController'></div>
+
+
+
+Scope
+----------------------------
+View >>> Scope <<< Controller
+
+$eval
+-----
+$eval('a * b');
+$eval('emp.ename');
+
+$parse
+-----
+var f = $parse('a * b');
+var r = f($scope);
+alert('result: ' + r);
+
+$interpolate
+-----
+var f = $interpolate('Result = {{a * b}}');
+var r = f($scope);
+alert('result: ' + r);
+
+
+Watch
+----------------------------
+$watch, $watchCollection, $watchGroup
+
+// Reference watch
+$scope.watch('a', function(newValue, oldValue){
+    if (newValue !== oldValue) {
+    }
+});
+
+// Equality watch or deep watch, used for object filed watch (with parameter true)
+$scope.watch('a', function(newValue, oldValue){
+    if (newValue !== oldValue) {
+    }
+}, true);
+
+// group
+$scope.watchGroup(['a', 'b', 'c'], function(newValue, oldValue){
+    if (newValue !== oldValue) {
+    }
+});
+
+// collection
+$scope.watchGroup('employees', function(newValue, oldValue){
+    if (newValue !== oldValue) {
+    }
+});
+
+
+Digest Cycle/Loop
+----------------------------
+1. Walk through entire watch-list for modifications
+2. Exist modifications? Execute watch listeners
+3. Keep note of all modifications and notify angular to update DOM
+
+Minimum 2 to maximum 10 cycles
+
+RootScope -> watch list
+  Scope -> watch list
+    Scope -> watch list
+
+$scope.apply() // root scope to child scopes
+$scope.digest() // current scope to child scopes (better performance)
+
+.js
+-----
+var btnClick = function() {
+    var $scope = angular.element($('#div1')).scope();
+    $scope.apply(function() {
+        $scope.s = Number($scope.a) + Number($scope.b);
+    });
+}
+
+.html
+-----
+<button onclick='btnClick'>Calc</button>
+<span>sum s = {{s}}</span>
+
+
+
+
+
+
+View
+----------------------------
+Data Binding:
+1. One-Time
+    - ::  // <span>{{::a}}</span>
+2. One-Way
+    - ng-bind  // <span ng-bind='a'></span>
+    - {{}}  // <span>{{a}}</span>
+3. Two-Way
+    - ng-model  // <input type='text' ng-model='a' />
+
+
+ng-if, ng-repeat, ng-show, ng-hide
+
+
+
+Filter
+----------------------------
+
+
+
+
+Directive
+----------------------------
+1. Component // html
+2. Decorator // ex. ng-click
+3. Templating // ex. ng-repeat
+
+.js
+-----
+app.directive('myInfoMsg', function() {
+    return {
+        template: '<div>some text</div>',
+        or
+        templateUrl: 'info-msg.htm',
+    }
+});
+
+.html
+-----
+// inline
+<script type='text/ng-template' id='info-msg.htm'>
+    <div>some text</div>
+</script>
+
+<div my-info-msg></div>
+
+info-msg.htm
+-----
+<div>some text</div>
+
+
+Directive linking process:
+1. Compile
+2. Controller
+3. PreLink
+4. PostLink
+
+.js
+-----
+app.directive('myInfoMsg', function($interpolate) {
+    return {
+        compile: function(tElement, tAttributes) {
+            return {
+                pre: function(scope, iElement, iAttributes, controller) {},
+                post: function(scope, iElement, iAttributes, controller) {
+                    iElement.css('border', '1px solid red');
+                    iElement.on('click', scope.btnClick);
+                },
+            }
+        }
+        controller: function($scope, $element, $attr) {
+            $scope.btnClick = function(){}
+        }
+    }
+});
+
+Scopes in directive
+-----
+1. Shared scope
+2. Inherited/child scope
+3. Isolated scope
+
+Shared scope
+-----
+app.directive('message', function(){
+    return {
+        templateUrl: 'info-msg.htm'
+    }
+});
+
+Inherited scope
+-----
+app.directive('message', function(){
+    return {
+        templateUrl: 'info-msg.htm',
+        scope: true
+    }
+});
+
+Isolated scope
+-----
+app.directive('message', function(){
+    return {
+        templateUrl: 'info-msg.htm',
+        scope: {
+            empid: '&'
+        }
+    }
+});
+
+<span message empid='employeeId'></span>
+
+Transclusion
+-----
+
+
+
+
+Service
+----------------------------
+- Singleton
+- Instantiated only once
+- Loaded & initialized lazily
+
+example: $http, $log, $location
+
+$http({
+    url: 'https://localhost:8080/sum/10/20',
+    method: 'GET'
+}).then{function(resp) { // success
+
+}, function(resp) { // error
+
+});
+
+
+1. Factory
+2. Service
+3. Provider
+
+Factory:
+-----
+app.controller('calc', function($scope, calcFactory){
+    calcService.doSum();
+});
+
+app.factory('calcFactory', function() {
+    var oCalcService = {};
+    oCalcService.doSum = function() {};
+    return oCalcService;
+});
+
+Service:
+-----
+app.controller('calc', function($scope, calcService){
+    calcService.doSum();
+});
+
+app.service('calcFactory', function() {
+    this.doSum = function() {};
+});
+
+Provider:
+-----
+app.controller('calc', function($scope, calcService){
+    calcService.doSum();
+});
+
+app.provider('calcService', function() {
+    var baseUrl = '';
+    this.config = function(url) {
+        baseUrl = url;
+    }
+    this.$get = function() {
+        var oCalcService = {};
+        oCalcService.doSum = function() {
+            // call rest service using $http
+        };
+        return oCalcService;
+    };
+});
+
+app.config(['calcServiceProvider', function(calcServiceProvider){
+    calcServiceProvider.config('https://localhost:8080/');
+}]);
+
+
+
+
+
+Route
+----------------------------
+1. ngRoute
+2. UI-Router
+
+.js
+-----
+var app = angular.module('app', ['ngRoute']);
+app.config(['$routeProvider', function($routeProvider) {
+    $routeProvider
+    .when('/', {
+        templateUrl: 'defailt.htm',
+        controller: 'home'
+    })
+    .when('/first-msg', {
+        templateUrl: 'msg1.htm',
+        controller: 'msg1'
+    })
+    .when('/suminput', {
+        templateUrl: 'suminput.htm',
+        controller: 'suminput'
+    })
+    .when('/sum/:a/:b/:c?/:d?', {
+        templateUrl: 'sum.htm',
+        controller: 'sum',
+        resolve: {
+            webServiceResult: function(dataService, $route) {
+                var a = $route.current.params.a;
+                var b = $route.current.params.b;
+                return dataService.sum(a, b);
+            }
+        }
+    })
+    .otherwise('', {
+        templateUrl: 'page-not-found.htm',
+        controller: 'pageNotFound'
+    })
+}]);
+
+$controller('sum', ['$scope', '$routeParams', 'webServiceResult', function($scope, $routeParams, webServiceResult){
+    $scope.a = $routeParams.a;
+    $scope.result = webServiceResult; // resolved result
+}]);
+
+$controller('suminput', ['$scope', '$location', '$interpolate', function($scope, $location, $interpolate){
+    $scope.doSum = function() {
+        var url = $interpolate('/sum/{{a}}/{{b}}')($scope);
+        $location.path(url);
+        // or
+        var path = '/sum/' + $scope.a + '/' + $scope.b;
+        $location.url(path);
+    }
+}]);
+
+.htm
+-----
+<div ng-view></div>
+
+
+
+Events
+----------------------------
+Raise event:
+-----
+1. $broadcast // current $scope to downward
+2. $emit // upward to $rootScope
+
+$scope.$broadcast('empSalChanged', { id: 10, sal: 4500 })
+
+Handle event:
+-----
+$scope.$on('empSaleChanged', function(e, data){
+    var newSal = data.sal;
+});
